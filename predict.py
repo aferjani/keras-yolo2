@@ -89,7 +89,7 @@ def _main_(args):
 
         print(len(boxes), 'boxes are found')
 
-        cv2.imwrite(image_path[:-4] + '_detected' + image_path[-4:], image)
+        cv2.imwrite('./keras-yolo2/' + image_path[:-4] + '_detected' + image_path[-4:], image)
 
 if __name__ == '__main__':
     args = argparser.parse_args()
