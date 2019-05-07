@@ -23,7 +23,7 @@
         "coord_scale":          1.0,
         "class_scale":          1.0,
 
-        "saved_weights_name":   "best_weights.h5",
+        "saved_weights_name":   "./keras-yolo2/best_weights.h5",
         "debug":                false
     },
 
