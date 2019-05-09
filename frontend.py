@@ -242,6 +242,7 @@ class YOLO(object):
     def load_weights(self, weight_path):
         self.model.load_weights(weight_path)
 
+
     def train(self, train_imgs,     # the list of images to train the model
                     valid_imgs,     # the list of images used to validate the model
                     train_times,    # the number of time to repeat the training set, often used for small datasets
@@ -285,11 +286,12 @@ class YOLO(object):
 
         train_generator = BatchGenerator(train_imgs, 
                                      generator_config, 
-                                     norm=self.feature_extractor.normalize)
+                                     norm=self.feature_extractor.normalize,
+                                     jitter=True)
         valid_generator = BatchGenerator(valid_imgs, 
                                      generator_config, 
                                      norm=self.feature_extractor.normalize,
-                                     jitter=False)   
+                                     jitter=True)   
                                      
         self.warmup_batches  = warmup_epochs * (train_times*len(train_generator) + valid_times*len(valid_generator))   
 
@@ -315,7 +317,11 @@ class YOLO(object):
                                      save_best_only=True, 
                                      mode='min', 
                                      period=1)
-        tensorboard = TensorBoard(log_dir=os.path.expanduser('~/logs/'), 
+        
+        if not os.path.exists('./keras_yolo2/logs'):
+            os.makedirs('./keras_yolo2/logs')
+        
+        tensorboard = TensorBoard(log_dir='./keras_yolo2/logs', 
                                   histogram_freq=0, 
                                   #write_batch_performance=True,
                                   write_graph=True, 
@@ -347,8 +353,8 @@ class YOLO(object):
 
     def evaluate(self, 
                  generator, 
-                 iou_threshold=0.3,
-                 score_threshold=0.3,
+                 iou_threshold=0.1,
+                 score_threshold=0.1,
                  max_detections=100,
                  save_path=None):
         """ Evaluate a given dataset using a given model.
